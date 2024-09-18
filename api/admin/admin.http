@@ -1,0 +1,27 @@
+@baseUrl = http://localhost:8888/api/v1
+@jwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiYWNjb3VudCI6ImFkbWluIiwidGltZSI6MTcyNjY4MzQ3NywiZXhwIjoxNzM2NzY5ODc3fQ.ELWfPp9hg2OebuTwgjsthKWgUx-uWDELaKQ9pT9UNY8
+
+###
+POST {{baseUrl}}/system/user/login
+Content-Type: application/json
+
+{
+    "account": "admin",
+    "password": "123456"
+}
+
+###
+POST {{baseUrl}}/system/user/add
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+    "account": "test2",
+    "userName": "test2",
+    "password": "123456"
+}
+
+###
+POST {{baseUrl}}/system/user/list
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}

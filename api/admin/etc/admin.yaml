@@ -1,0 +1,15 @@
+Name: admin
+Host: 0.0.0.0
+Port: 8888
+
+Mysql:
+  Datasource: root:123456@tcp(localhost:3306)/admin_db?charset=utf8mb4&parseTime=True
+
+Auth:
+  AccessSecret: ad879037-c7a4-4063-9236-6bfc35d54b7d
+  AccessExpire: 10086400
+  RefreshSecret: 7dda3b7b-1b7b-4b7b-8b7b-9b7b7b7b7b7b
+
+Redis:
+  Address: localhost:6379
+  Pass:

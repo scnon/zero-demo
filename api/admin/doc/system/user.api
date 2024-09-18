@@ -1,0 +1,97 @@
+syntax = "v1"
+
+info (
+	title: "用户信息"
+	description: "用户权限管理"
+	version: "v1"
+)
+
+type AddUserReq {
+	Account  string `json:"account"`
+	Password string `json:"password"`
+	UserName string `json:"userName"`
+	Status   int    `json:"status,default=1"`
+	Sort     int    `json:"sort,default=0"`
+	Remark   string `json:"remark,default=''"`
+}
+
+type DeleteUserReq {
+	Ids []int `json:"ids"`
+}
+
+type UpdateUserReq {
+	Id       int    `json:"id"`
+	Account  string `json:"account"`
+	Password string `json:"password"`
+	UserName string `json:"userName"`
+	Status   int    `json:"status"`
+	Sort     int    `json:"sort"`
+	Remark   string `json:"remark"`
+}
+
+type QueryUserListReq {
+	Account  string `json:"account,optional"`
+	UserName string `json:"userName,optional"`
+	Status   int    `json:"status,default=1"`
+	Page     int    `json:"page,default=1"`
+	PageSize int    `json:"pageSize,default=10"`
+}
+
+type QueryUserListResp {
+	Total int        `json:"total"`
+	List  []UserData `json:"list"`
+}
+
+type UserData {
+	Id         int    `json:"id"`
+	Account    string `json:"account"`
+	UserName   string `json:"userName"`
+	Status     int    `json:"status"`
+	Sort       int    `json:"sort"`
+	Remark     string `json:"remark"`
+	CreateTime string `json:"createTime"`
+	UpdateTime string `json:"updateTime"`
+}
+
+@server (
+	jwt: Auth
+	middleware: CheckUrl
+	group: system/user
+	prefix: /api/v1/system/user
+)
+
+service admin {
+	@handler addUser
+	post /add (AddUserReq) returns ()
+
+	@handler deleteUser
+	post /delete (DeleteUserReq) returns ()
+
+	@handler updateUser
+	post /update (UpdateUserReq) returns ()
+
+	@handler queryUserList
+	post /list (QueryUserListReq) returns (QueryUserListResp)
+}
+
+type LoginReq {
+	Account  string `json:"account"`
+	Password string `json:"password"`
+}
+
+type LoginResp {
+	UserName     string `json:"userName"`
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+	ExpireTime   int64  `json:"expireTime"`
+}
+
+@server (
+	group: system/user
+	prefix: /api/v1/system/user
+)
+
+service admin {
+	@handler userLogin
+	post /login (LoginReq) returns (LoginResp)
+}

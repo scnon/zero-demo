@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+  api:
+    cmds:
+      - goctl api go --api user/user.api --dir user
+  
+  build-user:
+    cmds:
+      - go build -o bin/user user/user.go
+  
+  user:
+    cmds:
+      - task api
+      - air -f user/etc/user-api.yaml
