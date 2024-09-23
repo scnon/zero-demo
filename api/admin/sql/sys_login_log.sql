@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS sys_login_log;
+CREATE TABLE IF NOT EXISTS sys_login_log (
+    id BIGINT AUTO_INCREMENT COMMENT '主键',
+    user_id BIGINT NOT NULL COMMENT '用户id',
+    user_name VARCHAR(50) NOT NULL COMMENT '用户名',
+    status TINYINT NOT NULL COMMENT '状态',
+    ip VARCHAR(50) NOT NULL COMMENT 'ip',
+    user_agent VARCHAR(255) NULL COMMENT 'user_agent',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间',
+    update_time DATETIME NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (id)
+) COMMENT '登录日志';

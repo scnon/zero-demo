@@ -1,32 +1,30 @@
-package user
+package logic
 
 import (
 	"context"
 
-	"zero-demo/api/admin/internal/svc"
-	"zero-demo/api/admin/internal/types"
+	"zero-demo/rpc/rbac/internal/svc"
 	"zero-demo/rpc/rbac/pb/rbac"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type DeleteUserLogic struct {
-	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	logx.Logger
 }
 
 func NewDeleteUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteUserLogic {
 	return &DeleteUserLogic{
-		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *DeleteUserLogic) DeleteUser(req *types.DeleteUserReq) error {
-	_, err := l.svcCtx.RbacRpc.DeleteUser(l.ctx, &rbac.DeleteUserReq{
-		Ids: req.Ids,
-	})
-	return err
+func (l *DeleteUserLogic) DeleteUser(in *rbac.DeleteUserReq) (*rbac.DeleteUserResp, error) {
+	// todo: add your logic here and delete this line
+
+	return &rbac.DeleteUserResp{}, nil
 }

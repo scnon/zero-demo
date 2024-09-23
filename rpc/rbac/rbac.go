@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"zero-demo/rpc/auth/auth"
-	"zero-demo/rpc/auth/internal/config"
-	"zero-demo/rpc/auth/internal/server"
-	"zero-demo/rpc/auth/internal/svc"
+	"zero-demo/rpc/rbac/internal/config"
+	"zero-demo/rpc/rbac/internal/server"
+	"zero-demo/rpc/rbac/internal/svc"
+	"zero-demo/rpc/rbac/rbac"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/auth.yaml", "the config file")
+var configFile = flag.String("f", "etc/rbac.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		auth.RegisterAuthServer(grpcServer, server.NewAuthServer(ctx))
+		rbac.RegisterRbacServer(grpcServer, server.NewRbacServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

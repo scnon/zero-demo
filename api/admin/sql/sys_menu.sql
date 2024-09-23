@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS sys_menu;
+CREATE TABLE IF NOT EXISTS sys_menu(
+    id BIGINT AUTO_INCREMENT COMMENT '主键',
+    name VARCHAR(50) DEFAULT '' NOT NULL COMMENT '菜单名称',
+    parent_id BIGINT DEFAULT 0 NOT NULL COMMENT '父菜单ID',
+    url VARCHAR(255) NULL COMMENT '菜单URL',
+    perms VARCHAR(255) NULL COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
+    type INT DEFAULT 1 NOT NULL COMMENT '类型   0：目录   1：菜单   2：按钮',
+    icon VARCHAR(50) NULL COMMENT '菜单图标',
+    sort INT DEFAULT 0 NOT NULL COMMENT '排序',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间',
+    update_time DATETIME NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    CONSTRAINT AK_name UNIQUE (name),
+    PRIMARY KEY (id)
+) COMMENT '菜单';

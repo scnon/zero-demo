@@ -1,17 +1,15 @@
-create table sys_user
-(
-    id          bigint auto_increment comment '主键' primary key,
-    account     char(20) default ''                not null comment '账号',
-    user_name   varchar(50)                        not null comment '昵称',
-    password    varchar(64) charset utf8mb3        not null comment '密码',
-    status_id   tinyint  default 1                 not null comment '状态(1:正常，0:禁用)',
-    sort        int      default 1                 not null comment '排序',
-    remark      varchar(255)                       null comment '备注',
+DROP TABLE IF EXISTS sys_user;
+CREATE TABLE IF NOT EXISTS sys_user (
+    id bigint auto_increment comment '主键',
+    username varchar(50) not null comment '用户名',
+    password varchar(50) not null comment '密码',
+    nickname varchar(50) default '' not null comment '昵称',
+    status tinyint default 1 not null comment '状态(1:正常,0:禁用)',
+    sort int default 1 not null comment '排序',
+    remark varchar(255) null comment '备注',
+    roles varchar(255) null comment '角色',
     create_time datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    update_time datetime                           null on update CURRENT_TIMESTAMP comment '修改时间',
-    constraint  AK_phone unique (account)
+    update_time datetime null on update CURRENT_TIMESTAMP comment '修改时间',
+    constraint AK_username unique (username),
+    primary key (id)
 ) comment '用户信息';
-
-
-INSERT INTO sys_user (id, account, user_name, password, status_id, sort, remark, create_time, update_time) VALUES (1, 'admin', '超级管理员', '123456', 1, 1, '超级管理员', current_timestamp, null);
-INSERT INTO sys_user (id, account, user_name, password, status_id, sort, remark, create_time, update_time) VALUES (2, 'user', '普通用户', '123456', 1, 2, '演示权限', current_timestamp, null);

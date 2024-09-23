@@ -1,0 +1,15 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  dev:
+    cmds:
+      - air 
+  sql:
+    cmds:
+      - goctl model mysql ddl -src ./sql/user.sql -dir ./internal/model
+      - goctl model mysql ddl -src ./sql/role.sql -dir ./internal/model
+  protoc:
+    cmds:
+      - goctl rpc protoc rbac.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=.

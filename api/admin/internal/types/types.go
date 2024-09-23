@@ -4,20 +4,20 @@
 package types
 
 type AddUserReq struct {
-	Account  string `json:"account"`
-	Password string `json:"password"`
 	UserName string `json:"userName"`
+	Password string `json:"password"`
+	NickName string `json:"nickName"`
 	Status   int    `json:"status,default=1"`
 	Sort     int    `json:"sort,default=0"`
 	Remark   string `json:"remark,default=''"`
 }
 
 type DeleteUserReq struct {
-	Ids []int `json:"ids"`
+	Ids []int64 `json:"ids"`
 }
 
 type LoginReq struct {
-	Account  string `json:"account"`
+	UserName string `json:"userName"`
 	Password string `json:"password"`
 }
 
@@ -29,8 +29,8 @@ type LoginResp struct {
 }
 
 type QueryUserListReq struct {
-	Account  string `json:"account,optional"`
 	UserName string `json:"userName,optional"`
+	NickName string `json:"nickName,optional"`
 	Status   int    `json:"status,default=1"`
 	Page     int    `json:"page,default=1"`
 	PageSize int    `json:"pageSize,default=10"`
@@ -42,19 +42,18 @@ type QueryUserListResp struct {
 }
 
 type UpdateUserReq struct {
-	Id       int    `json:"id"`
-	Account  string `json:"account"`
+	Id       int64  `json:"id"`
 	Password string `json:"password"`
-	UserName string `json:"userName"`
+	NickName string `json:"nickName"`
 	Status   int    `json:"status"`
 	Sort     int    `json:"sort"`
 	Remark   string `json:"remark"`
 }
 
 type UserData struct {
-	Id         int    `json:"id"`
-	Account    string `json:"account"`
+	Id         int64  `json:"id"`
 	UserName   string `json:"userName"`
+	NickName   string `json:"nickName"`
 	Status     int    `json:"status"`
 	Sort       int    `json:"sort"`
 	Remark     string `json:"remark"`

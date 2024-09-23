@@ -1,6 +1,12 @@
 Name: admin
-Host: 0.0.0.0
+Host: localhost 
 Port: 8888
+
+RbacClientConf:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: rbac.rpc
 
 Mysql:
   Datasource: root:123456@tcp(localhost:3306)/admin_db?charset=utf8mb4&parseTime=True

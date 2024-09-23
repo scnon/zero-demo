@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"zero-demo/rpc/auth/auth"
-	"zero-demo/rpc/auth/internal/svc"
+	"zero-demo/rpc/rbac/internal/svc"
+	"zero-demo/rpc/rbac/pb/rbac"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +23,8 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 	}
 }
 
-func (l *PingLogic) Ping(in *auth.Request) (*auth.Response, error) {
+func (l *PingLogic) Ping(in *rbac.Request) (*rbac.Response, error) {
 	// todo: add your logic here and delete this line
 
-	return &auth.Response{}, nil
+	return &rbac.Response{}, nil
 }

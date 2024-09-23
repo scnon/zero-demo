@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS rbac_role (
+    id BIGINT AUTO_INCREMENT COMMENT '主键',
+    role_name VARCHAR(50) DEFAULT '' NOT NULL COMMENT '角色名',
+    permissions VARCHAR(255) NULL COMMENT '权限',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间',
+    update_time DATETIME NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    CONSTRAINT AK_role_name UNIQUE (role_name),
+    PRIMARY KEY (id)
+) COMMENT '角色信息';

@@ -27,7 +27,7 @@ type (
 	sysUserModel interface {
 		Insert(ctx context.Context, data *SysUser) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*SysUser, error)
-		FindOneByAccount(ctx context.Context, account string) (*SysUser, error)
+		FindOneByUsername(ctx context.Context, username string) (*SysUser, error)
 		Update(ctx context.Context, data *SysUser) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -38,15 +38,16 @@ type (
 	}
 
 	SysUser struct {
-		Id         int64          `db:"id"`
-		Account    string         `db:"account"`
-		UserName   string         `db:"user_name"`
-		Password   string         `db:"password"`
-		StatusId   int64          `db:"status_id"` // (1:0:)
-		Sort       int64          `db:"sort"`
-		Remark     sql.NullString `db:"remark"`
-		CreateTime time.Time      `db:"create_time"`
-		UpdateTime sql.NullTime   `db:"update_time"`
+		Id         int64          `db:"id"`          // 主键
+		Username   string         `db:"username"`    // 用户名
+		Password   string         `db:"password"`    // 密码
+		Nickname   string         `db:"nickname"`    // 昵称
+		Status     int64          `db:"status"`      // 状态(1:正常,0:禁用)
+		Sort       int64          `db:"sort"`        // 排序
+		Remark     sql.NullString `db:"remark"`      // 备注
+		Roles      string         `db:"roles"`       // 角色列表
+		CreateTime time.Time      `db:"create_time"` // 创建时间
+		UpdateTime sql.NullTime   `db:"update_time"` // 修改时间
 	}
 )
 
@@ -77,10 +78,10 @@ func (m *defaultSysUserModel) FindOne(ctx context.Context, id int64) (*SysUser, 
 	}
 }
 
-func (m *defaultSysUserModel) FindOneByAccount(ctx context.Context, account string) (*SysUser, error) {
+func (m *defaultSysUserModel) FindOneByUsername(ctx context.Context, username string) (*SysUser, error) {
 	var resp SysUser
-	query := fmt.Sprintf("select %s from %s where `account` = ? limit 1", sysUserRows, m.table)
-	err := m.conn.QueryRowCtx(ctx, &resp, query, account)
+	query := fmt.Sprintf("select %s from %s where `username` = ? limit 1", sysUserRows, m.table)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, username)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -92,14 +93,14 @@ func (m *defaultSysUserModel) FindOneByAccount(ctx context.Context, account stri
 }
 
 func (m *defaultSysUserModel) Insert(ctx context.Context, data *SysUser) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, sysUserRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Account, data.UserName, data.Password, data.StatusId, data.Sort, data.Remark)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, sysUserRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Username, data.Password, data.Nickname, data.Status, data.Sort, data.Remark, data.Roles)
 	return ret, err
 }
 
 func (m *defaultSysUserModel) Update(ctx context.Context, newData *SysUser) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, sysUserRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, newData.Account, newData.UserName, newData.Password, newData.StatusId, newData.Sort, newData.Remark, newData.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.Username, newData.Password, newData.Nickname, newData.Status, newData.Sort, newData.Remark, newData.Roles, newData.Id)
 	return err
 }
 

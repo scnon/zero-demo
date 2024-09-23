@@ -26,15 +26,18 @@ func NewQueryUserListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Que
 func (l *QueryUserListLogic) QueryUserList(req *types.QueryUserListReq) (resp *types.QueryUserListResp, err error) {
 	resp = &types.QueryUserListResp{}
 
-	userList, total, err := l.svcCtx.UserModel.FindAll(l.ctx, req.Page, req.PageSize, req.Account, req.Status)
+	userList, total, err := l.svcCtx.UserModel.FindAll(l.ctx, req.Page, req.PageSize, req.UserName, req.Status)
+	if err != nil {
+		return
+	}
 
 	list := []types.UserData{}
 	for _, user := range *userList {
 		list = append(list, types.UserData{
-			Id:         int(user.Id),
-			Account:    user.Account,
-			UserName:   user.UserName,
-			Status:     int(user.StatusId),
+			Id:         user.Id,
+			UserName:   user.Username,
+			NickName:   user.Nickname,
+			Status:     int(user.Status),
 			Sort:       int(user.Sort),
 			Remark:     user.Remark.String,
 			CreateTime: user.CreateTime.Format("2006-01-02 15:04:05"),

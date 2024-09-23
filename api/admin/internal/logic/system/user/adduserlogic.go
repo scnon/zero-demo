@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"log"
 	"time"
 
 	"zero-demo/api/admin/internal/model"
@@ -28,26 +29,27 @@ func NewAddUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserLo
 }
 
 func (l *AddUserLogic) AddUser(req *types.AddUserReq) (err error) {
-	account, _ := l.svcCtx.UserModel.FindOneByAccount(l.ctx, req.Account)
+	account, _ := l.svcCtx.UserModel.FindOneByUsername(l.ctx, req.UserName)
 
 	if account != nil {
 		return errors.New("用户已存在")
 	}
 
 	user := model.SysUser{
-		Account:    req.Account,
+		Username:   req.UserName,
 		Password:   req.Password,
-		UserName:   req.UserName,
-		StatusId:   int64(req.Status),
+		Nickname:   req.NickName,
+		Status:     int64(req.Status),
 		Sort:       int64(req.Sort),
 		CreateTime: time.Time{},
 		UpdateTime: sql.NullTime{},
 	}
-	_, err = l.svcCtx.UserModel.Insert(l.ctx, &user)
 
+	_, err = l.svcCtx.UserModel.Insert(l.ctx, &user)
 	if err != nil {
 		return err
 	}
 
+	log.Println("user:", user)
 	return
 }

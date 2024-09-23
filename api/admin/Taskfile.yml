@@ -1,0 +1,16 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  dev:
+    cmds:
+      - air 
+  api:
+    cmds:
+      - goctl api go --api doc/admin.api --dir .
+  sql:
+    cmds:
+      - goctl model mysql ddl -src ./sql/user.sql -dir ./internal/model
+      - goctl model mysql ddl -src ./sql/role.sql -dir ./internal/model
+      - goctl model mysql ddl -src ./sql/menu.sql -dir ./internal/model

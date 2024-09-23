@@ -30,11 +30,11 @@ func NewUserLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLog
 }
 
 func (l *UserLoginLogic) UserLogin(req *types.LoginReq) (resp *types.LoginResp, err error) {
-	if len(strings.TrimSpace(req.Account)) == 0 || len(strings.TrimSpace(req.Password)) == 0 {
+	if len(strings.TrimSpace(req.UserName)) == 0 || len(strings.TrimSpace(req.Password)) == 0 {
 		return nil, errors.New("用户名或密码不能为空")
 	}
 
-	userInfo, err := l.svcCtx.UserModel.FindOneByAccount(l.ctx, req.Account)
+	userInfo, err := l.svcCtx.UserModel.FindOneByUsername(l.ctx, req.UserName)
 	switch err {
 	case nil:
 	case sqlc.ErrNotFound:
@@ -52,16 +52,17 @@ func (l *UserLoginLogic) UserLogin(req *types.LoginReq) (resp *types.LoginResp, 
 	accessSecret := l.svcCtx.Config.Auth.AccessSecret
 	refreshSecret := l.svcCtx.Config.Auth.RefreshSecret
 
-	jwtToken, _ := l.getJwtToken(accessSecret, userInfo.Account, now, accessExpire, userInfo.Id)
+	jwtToken, _ := l.getJwtToken(accessSecret, userInfo.Username, now, accessExpire, userInfo.Id)
 	refresh, err := l.getRefreshToken(refreshSecret)
 	if err != nil {
 		logc.Debug(l.ctx, "getRefreshToken", err)
 	}
 
 	return &types.LoginResp{
-		UserName:     userInfo.UserName,
+		UserName:     userInfo.Username,
 		AccessToken:  jwtToken,
 		RefreshToken: refresh,
+		ExpireTime:   now + accessExpire,
 	}, nil
 }
 
